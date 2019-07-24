@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <title>Taller UTEC</title>
+        <style type="text/css">
+            label {
+            /* Para asegurarse que todos los labels tienen el mismo tamaño y están alineados correctamente */
+            display: inline-block;
+            width: 90px;
+            text-align: right;}
+            input, textarea {
+            /* Para asegurarse de que todos los campos de texto tienen las mismas propiedades de fuente
+            Por defecto, las areas de texto tienen una fuente con monospace */
+            font: 1em sans-serif;
+
+            /* Para darle el mismo tamaño a todos los campos de texto */
+            width: 300px;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+
+            /* Para armonizar el look&feel del borde en los campos de texto */
+            border: 1px solid #999;
+        }
+        input:focus, textarea:focus {
+            /* Para dar un pequeño destaque en elementos activos*/
+            border-color: #000;
+        }
+        textarea {
+            /* Para alinear campos de texto multilínea con sus labels */
+            vertical-align: top;
+
+            /* Para dar suficiente espacio para escribir texto */
+            height: 5em;
+
+            /* Para permitir a los usuarios cambiar el tamaño de cualquier textarea verticalmente
+                No funciona en todos los navegadores */
+            resize: vertical;
+        }
+        .button {
+            /* Para posicionar los botones a la misma posición que los campos de texto */
+            padding-left: 90px; /* mismo tamaño a todos los elementos label */
+        }
+        button {
+            /* Este margen extra representa aproximadamente el mismo espacio que el espacio
+            entre los labels y sus campos de texto */
+            margin-left: .5em;
+        }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+            function register() {
+                var name = document.getElementById("name").value;
+                var apellido = document.getElementById("apellido").value;
+                var mensaje = document.getElementById("msg").value;
+                const data = {"nombre": name,"apellido": apellido, "mensaje": mensaje}; 
+                const param = {
+                headers:{"Content-Type": "application/json"},
+                body: JSON.stringify(data),
+                method:"POST"
+                };
+                const request = async () => {
+                    const json = await fetch('http://192.168.1.47:8000/api/crearperson/',param).then(res=>{return res.json()}).then(data => { alert('Se ha registrado con exito') }).catch( ()=> { alert('Error en registro')});
+                }
+                request();
+            }
+            function list(){
+                const request = async () => {
+                    const json = await fetch('http://192.168.1.47:8000/api/person/').then(res=>{return res.json()}).then(data => {
+                        var body = document.getElementsByTagName("body")[0];
+                        // Crea un elemento <table> y un elemento <tbody>
+                        var tabla   = document.createElement("table");
+                        tabla.setAttribute("id", 'lista');
+                        var tblBody = document.createElement("tbody");
+
+                        // Crea las celdas
+                        for (var i = 0; i < data.length; i++) {
+                        // Crea las hileras de la tabla
+                        var hilera = document.createElement("tr");
+
+                        for (var j = 0; j < 1; j++) {
+                            // Crea un elemento <td> y un nodo de texto, haz que el nodo de
+                            // texto sea el contenido de <td>, ubica el elemento <td> al final
+                            // de la hilera de la tabla
+                            var celda = document.createElement("td");
+                            var textoCelda = document.createTextNode("Nombre: "+data[i]["first_name"]+ "  Apellido: "+ data[i]["last_name"] + "  Mensaje: " + data[i]["message"]);
+                            celda.appendChild(textoCelda);
+                            hilera.appendChild(celda);
+                        }
+
+                        // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                        tblBody.appendChild(hilera);
+                        }
+
+                        // posiciona el <tbody> debajo del elemento <table>
+                        tabla.appendChild(tblBody);
+                        // appends <table> into <body>
+                        body.appendChild(tabla);
+                    }).catch( ()=> { alert('Error al obtener usuarios')});
+                }
+                request();
+            }
+            function clean(){
+                var elem = document.getElementById('lista');
+                elem.parentNode.removeChild(elem);
+            }
+        </script>
+        <div>
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="user_name" />
+            </div>
+            <div>
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="user_apellido" />
+            </div>
+            <div>
+                <label for="msg">Mensaje:</label>
+                <textarea id="msg" name="user_message"></textarea>
+            </div>
+            
+            <div class="button">
+                <button onclick="register()">Registro</button>
+            </div>
+                <div class="button">
+                <button onclick="list()">Listar miembros</button>
+            </div>
+            </div>
+                <div class="button">
+                <button onclick="clean()">Clean</button>
+            </div>
+        </div>
+    </body>
+</html>
