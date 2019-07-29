@@ -61,13 +61,13 @@
                 method:"POST"
                 };
                 const request = async () => {
-                    const json = await fetch('http://192.168.1.47:8000/api/crearperson/',param).then(res=>{return res.json()}).then(data => { alert('Se ha registrado con exito') }).catch( ()=> { alert('Error en registro')});
+                    const json = await fetch('http://{{ ip }}:80/api/crearperson/',param).then(res=>{return res.json()}).then(data => { alert('Se ha registrado con exito') }).catch( ()=> { alert('Error en registro')});
                 }
                 request();
             }
             function list(){
                 const request = async () => {
-                    const json = await fetch('http://192.168.1.47:8000/api/person/').then(res=>{return res.json()}).then(data => {
+                    const json = await fetch('http://{{ ip }}:80/api/person/').then(res=>{return res.json()}).then(data => {
                         var body = document.getElementsByTagName("body")[0];
                         // Crea un elemento <table> y un elemento <tbody>
                         var tabla   = document.createElement("table");

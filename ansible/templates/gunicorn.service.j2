@@ -1,0 +1,10 @@
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/home/centos/Back/utec
+ExecStart=/usr/bin/gunicorn --workers 4 --bind 127.0.0.1:8000 utec.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+

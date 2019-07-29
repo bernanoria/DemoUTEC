@@ -1,0 +1,97 @@
+- hosts: appA
+  become: true
+  tasks:
+    - name: Installing epel-release and necessary packages
+      yum:
+        name: "{{item}}"
+        state: latest
+        disable_gpg_check: yes
+      with_items:
+         - epel-release
+         - python-pip
+         - python-devel
+    
+    - yum:
+        name: "@Development tools"
+        state: present
+
+    - name: Sending requisits file
+      template:
+        src: templates/requerimientos.txt.j2
+        dest: requerimientos.txt
+
+    - name: Installing pre-requisits for Django
+      pip:
+        requirements: /home/centos/requerimientos.txt
+        virtualenv_python: python2.7
+    
+    - name: Configuring gunicorn service
+      template:
+        src: templates/gunicorn.service.j2
+        dest: /etc/systemd/system/gunicorn.service
+        force: yes
+      notify:
+         - reload daemon
+
+    - name: Sendind app files
+      copy:
+       src: files/Back/utec
+       dest: Back
+
+    - name: Creating html folder
+      file:
+        path: html
+        state: directory
+    
+    - template:
+        src: templates/index.html.j2
+        dest: html/index.html
+    
+    - name: Make data base igration 
+      shell: python manage.py makemigrations web
+      args:
+        chdir: Back/utec
+
+    - name: Migrating database
+      shell: python manage.py migrate
+      args:
+        chdir: Back/utec
+
+    - name: Intalling nginx
+      yum:
+        name: nginx
+        state: latest
+    
+    - name: Configuring nginx
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        force: yes
+    
+    - template:
+        src: templates/utec.conf.j2
+        dest: /etc/nginx/conf.d/utec.conf
+        force: yes
+      notify:
+        - start gunicorn
+        - restart nginx
+
+    - name: Change the httpd_t domain to permissive
+      selinux_permissive:
+        name: httpd_t
+        permissive: true
+
+  handlers:
+    - name: reload daemon
+      systemd:
+        daemon_reload: yes
+
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted
+    
+    - name: start gunicorn
+      systemd:
+        name: gunicorn
+        state: started
