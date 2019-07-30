@@ -1,16 +1,19 @@
 - hosts: appB
   become: true
   tasks:
-    - name: Installing epel-release and necessary packages
+    - name: Installing necessary packages
       yum:
-        name: "{{item}}"
+        name: epel-release
         state: latest
         disable_gpg_check: yes
+
+    - yum:
+        name: "{{item}}"
+        state: latest
       with_items:
-         - epel-release
          - python-pip
          - python-devel
-    
+
     - yum:
         name: "@Development tools"
         state: present
@@ -47,7 +50,7 @@
         src: templates/index.html.j2
         dest: html/index.html
     
-    - name: Make data base igration 
+    - name: Make data base migration 
       shell: python manage.py makemigrations web
       args:
         chdir: Back/utec
