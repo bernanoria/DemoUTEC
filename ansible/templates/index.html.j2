@@ -47,6 +47,7 @@
             margin-left: .5em;
         }
         </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
     <body>
         <script type="text/javascript">
@@ -106,29 +107,31 @@
                 elem.parentNode.removeChild(elem);
             }
         </script>
-        <div>
+        <img src="https://miro.medium.com/max/3964/1*EBXc9eJ1YRFLtkNI_djaAw.png" alt="Smiley face" width="500" height="300">
+        <div style="margin-top:20px">
+            <h1 style="margin-left:80px" class="text-monospace">DEMO</h1>
             <div>
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="user_name" />
             </div>
-            <div>
+            <div style="margin-top:10px;">
                 <label for="apellido">Apellido:</label>
                 <input type="text" id="apellido" name="user_apellido" />
             </div>
-            <div>
+            <div style="margin-top:10px;">
                 <label for="msg">Mensaje:</label>
                 <textarea id="msg" name="user_message"></textarea>
             </div>
-            
-            <div class="button">
-                <button onclick="register()">Registro</button>
-            </div>
-                <div class="button">
-                <button onclick="list()">Listar miembros</button>
-            </div>
-            </div>
-                <div class="button">
-                <button onclick="clean()">Clean</button>
+            <div class="d-flex flex-row bd-highlight mb-3">
+                <div class="p-2 bd-highlight">
+                    <button class="btn btn-primary" onclick="register()">Registro</button>
+                </div>
+                <div class="p-2 bd-highlight">
+                    <button class="btn btn-primary" onclick="list()">Listar miembros</button>
+                </div>
+                <div class="p-2 bd-highlight">
+                    <button class="btn btn-primary" onclick="clean()">Clean</button>
+                <div>
             </div>
         </div>
     </body>
