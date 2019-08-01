@@ -1,14 +1,8 @@
 
 provider "aws" {
-  access_key = ""
-  secret_key = ""
-  region     = "us-east-1"
-  version = "~> 2.21"
-}
-
-resource "aws_eip_association" "ip_asociacionA" {
-  instance_id   = "${aws_instance.AppA.id}"
-  allocation_id = "eipalloc-0ed34586c8d5921e3"
+  region                  = "us-east-2"
+  shared_credentials_file = "~/.aws/credentials"
+  profile                 = "default"
 }
 
 resource "aws_eip_association" "ip_asociacionB" {
@@ -21,7 +15,7 @@ resource "aws_default_vpc" "default" {}
 
 
 resource "aws_security_group" "UTEC" {
-  name        = "UTEC"
+  name        = "UTECB"
   description = "Reglas de seguridad para instancia ec2"
   vpc_id      = "${aws_default_vpc.default.id}"
 
@@ -50,19 +44,8 @@ resource "aws_security_group" "UTEC" {
   }
 }
 
-
-resource "aws_instance" "AppA" {
-  ami           = "ami-02eac2c0129f6376b"
-  instance_type = "t2.micro"
-  key_name = "utec"
-  vpc_security_group_ids = ["${aws_security_group.UTEC.id}"]
-  tags = {
-    Name = "AppA"
-  }
-}
-
 resource "aws_instance" "AppB" {
-  ami           = "ami-02eac2c0129f6376b"
+  ami           = "ami-0f2b4fc905b0bd1f1"
   instance_type = "t2.micro"
   key_name = "utec"
   vpc_security_group_ids = ["${aws_security_group.UTEC.id}"]
