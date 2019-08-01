@@ -6,28 +6,15 @@ provider "aws" {
   version = "~> 2.21"
 }
 
-resource "aws_eip" "utecA" {
-  tags = {
-    Name = "AppA_IP"
-  }
-}
-
-resource "aws_eip" "utecB" {
-  tags = {
-    Name = "AppB_IP"
-  }
-}
-
 resource "aws_eip_association" "ip_asociacionA" {
   instance_id   = "${aws_instance.AppA.id}"
-  allocation_id = "${aws_eip.utecA.id}"
+  allocation_id = "eipalloc-0ed34586c8d5921e3"
 }
 
 resource "aws_eip_association" "ip_asociacionB" {
   instance_id   = "${aws_instance.AppB.id}"
-  allocation_id = "${aws_eip.utecB.id}"
+  allocation_id = "eipalloc-047c8bbb55041ebe3"
 }
-
 
 
 resource "aws_default_vpc" "default" {}
